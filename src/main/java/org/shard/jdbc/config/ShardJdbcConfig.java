@@ -1,9 +1,22 @@
 package org.shard.jdbc.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import io.shardingsphere.api.config.rule.ShardingRuleConfiguration;
+import io.shardingsphere.api.config.rule.TableRuleConfiguration;
+import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
+import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
 
 @Configuration
 public class ShardJdbcConfig {
@@ -187,4 +200,44 @@ public class ShardJdbcConfig {
         return datasource;
     }
 
+    @Bean(name = "dataOneTemplate")
+    public JdbcTemplate dataOneTemplate(@Autowired DruidDataSource dataOneSource){
+        return new JdbcTemplate(dataOneSource);
+    }
+    @Bean(name = "dataTwoTemplate")
+    public JdbcTemplate dataTwoTemplate(@Autowired DruidDataSource dataTwoSource){
+        return new JdbcTemplate(dataTwoSource) ;
+    }
+    @Bean(name = "dataThreeTemplate")
+    public JdbcTemplate dataThreeTemplate (@Autowired DruidDataSource dataThreeSource){
+        return new JdbcTemplate(dataThreeSource) ;
+    }
+
+    @Bean
+    public DataSource dataSource(@Autowired DruidDataSource dataOneSource,
+                                 @Autowired DruidDataSource dataTwoSource,
+                                 @Autowired DruidDataSource dataThreeSource) throws SQLException {
+        ShardingRuleConfiguration shardingRuleConfiguration = new ShardingRuleConfiguration();
+        shardingRuleConfiguration.getTableRuleConfigs().add(getTableRule01());
+
+        shardingRuleConfiguration.setDefaultDataSourceName("ds_0");
+        Map<String,DataSource> dataMap = new LinkedHashMap<String, DataSource>();
+        dataMap.put("ds_0",dataOneSource);
+        dataMap.put("ds_2",dataTwoSource) ;
+        dataMap.put("ds_3",dataThreeSource) ;
+        Properties prop = new Properties();
+        return ShardingDataSourceFactory.createDataSource(dataMap,shardingRuleConfiguration,new HashMap<String, Object>(),prop);
+
+    }
+
+    private static TableRuleConfiguration getTableRule01(){
+        TableRuleConfiguration result = new TableRuleConfiguration();
+        result.setLogicTable("table_one");
+        result.setActualDataNodes("ds_${2..3}.table_one_${1..5}");//配置数据库里面的表
+        //分库计算
+        result.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("phone", new DataSourceAlg()));
+        //分表计算
+        result.setTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("phone",new TableOneAlg()));
+        return result;
+    }
 }

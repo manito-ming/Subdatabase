@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.shard.jdbc.mapper.TableOneMapper">
+    <resultMap id="BaseResultMap" type="org.shard.jdbc.pojo.TableOne" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="back_one" property="backOne" jdbcType="VARCHAR" />
+        <result column="back_two" property="backTwo" jdbcType="VARCHAR" />
+        <result column="back_three" property="backThree" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <update id="updateOnePhone" parameterType="org.shard.jdbc.pojo.TableOne" >
+    update table_one
+    set
+      back_one = #{backOne,jdbcType=VARCHAR},
+      back_two = #{backTwo,jdbcType=VARCHAR},
+       back_three = #{backTwo,jdbcType=VARCHAR}
+    where phone = #{phone,jdbcType=VARCHAR}
+  </update>
+
+</mapper>
