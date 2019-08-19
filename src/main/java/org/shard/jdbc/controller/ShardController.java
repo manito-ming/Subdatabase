@@ -22,8 +22,8 @@ public class ShardController {
         TableOne tableOne = new TableOne();
         tableOne.setPhone(phone);
         tableOne.setBackOne("back_one3");
-        tableOne.setBackTwo("back_two3");
-        tableOne.setBackThree("back_three3");
+        tableOne.setBackTwo("back_two15");
+        tableOne.setBackThree("back_three17");
         shardService.updateOneByPhone(tableOne);
         return "SUCCESS";
     }
