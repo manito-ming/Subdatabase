@@ -204,14 +204,14 @@ public class ShardJdbcConfig {
     public JdbcTemplate dataOneTemplate(@Autowired DruidDataSource dataOneSource){
         return new JdbcTemplate(dataOneSource);
     }
-    @Bean(name = "dataTwoTemplate")
-    public JdbcTemplate dataTwoTemplate(@Autowired DruidDataSource dataTwoSource){
-        return new JdbcTemplate(dataTwoSource) ;
-    }
-    @Bean(name = "dataThreeTemplate")
-    public JdbcTemplate dataThreeTemplate (@Autowired DruidDataSource dataThreeSource){
-        return new JdbcTemplate(dataThreeSource) ;
-    }
+//    @Bean(name = "dataTwoTemplate")
+//    public JdbcTemplate dataTwoTemplate(@Autowired DruidDataSource dataTwoSource){
+//        return new JdbcTemplate(dataTwoSource) ;
+//    }
+//    @Bean(name = "dataThreeTemplate")
+//    public JdbcTemplate dataThreeTemplate (@Autowired DruidDataSource dataThreeSource){
+//        return new JdbcTemplate(dataThreeSource) ;
+//    }
 
     @Bean
     public DataSource dataSource(@Autowired DruidDataSource dataOneSource,
@@ -233,7 +233,9 @@ public class ShardJdbcConfig {
     private static TableRuleConfiguration getTableRule01(){
         TableRuleConfiguration result = new TableRuleConfiguration();
         result.setLogicTable("table_one");
+        //这个值可以改，但是小心之后的算出来的数据不对，或者改完可以根据新规则重新插入一套数据
         result.setActualDataNodes("ds_${2..3}.table_one_${1..5}");//配置数据库里面的表
+
         //分库计算
         result.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("phone", new DataSourceAlg()));
         //分表计算
