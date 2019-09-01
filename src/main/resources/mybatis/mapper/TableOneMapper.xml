@@ -15,7 +15,7 @@
     set
       back_one = #{backOne,jdbcType=VARCHAR},
       back_two = #{backTwo,jdbcType=VARCHAR},
-       back_three = #{backTwo,jdbcType=VARCHAR}
+       back_three = #{backThree,jdbcType=VARCHAR}
     where phone = #{phone,jdbcType=VARCHAR}
   </update>
 

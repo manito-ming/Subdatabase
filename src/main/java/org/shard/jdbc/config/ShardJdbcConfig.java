@@ -200,19 +200,22 @@ public class ShardJdbcConfig {
         return datasource;
     }
 
+    //可以指定执行的数据源，对应impl里面的createTable,可删除
     @Bean(name = "dataOneTemplate")
     public JdbcTemplate dataOneTemplate(@Autowired DruidDataSource dataOneSource){
         return new JdbcTemplate(dataOneSource);
     }
-//    @Bean(name = "dataTwoTemplate")
-//    public JdbcTemplate dataTwoTemplate(@Autowired DruidDataSource dataTwoSource){
-//        return new JdbcTemplate(dataTwoSource) ;
-//    }
-//    @Bean(name = "dataThreeTemplate")
-//    public JdbcTemplate dataThreeTemplate (@Autowired DruidDataSource dataThreeSource){
-//        return new JdbcTemplate(dataThreeSource) ;
-//    }
-
+    @Bean(name = "dataTwoTemplate")
+    public JdbcTemplate dataTwoTemplate(@Autowired DruidDataSource dataTwoSource){
+        return new JdbcTemplate(dataTwoSource) ;
+    }
+    @Bean(name = "dataThreeTemplate")
+    public JdbcTemplate dataThreeTemplate (@Autowired DruidDataSource dataThreeSource){
+        return new JdbcTemplate(dataThreeSource) ;
+    }
+    /**
+     * Shard-JDBC 分库配置
+     */
     @Bean
     public DataSource dataSource(@Autowired DruidDataSource dataOneSource,
                                  @Autowired DruidDataSource dataTwoSource,
@@ -222,6 +225,7 @@ public class ShardJdbcConfig {
 
         shardingRuleConfiguration.setDefaultDataSourceName("ds_0");
         Map<String,DataSource> dataMap = new LinkedHashMap<String, DataSource>();
+        //配置每一个数据源对应的数据库
         dataMap.put("ds_0",dataOneSource);
         dataMap.put("ds_2",dataTwoSource) ;
         dataMap.put("ds_3",dataThreeSource) ;

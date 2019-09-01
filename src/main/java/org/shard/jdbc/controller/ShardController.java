@@ -14,16 +14,16 @@ public class ShardController {
     private ShardService shardService;
 
     /**
-     * 6、查询表 table_one 数据
+     * 6、修改表 table_one 数据
      */
     @RequestMapping("/updateOneByPhone/{phone}")
     public String UpdateOneByPhone (@PathVariable("phone") String phone){
-        phone = "phone15";
+        phone = "phone6";
         TableOne tableOne = new TableOne();
         tableOne.setPhone(phone);
         tableOne.setBackOne("back_one3");
-        tableOne.setBackTwo("back_two15");
-        tableOne.setBackThree("back_three17");
+        tableOne.setBackTwo("back_two13");
+        tableOne.setBackThree("back_three13");
         shardService.updateOneByPhone(tableOne);
         return "SUCCESS";
     }
