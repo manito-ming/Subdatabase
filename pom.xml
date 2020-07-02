@@ -19,7 +19,7 @@
         <shard-jdbc.version>3.1.0</shard-jdbc.version>
         <fastjson.version>1.2.47</fastjson.version>
         <joda.time.version>2.9.9</joda.time.version>
-        <mysql.version>5.1.39</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
 
     </properties>
 
